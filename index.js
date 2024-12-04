@@ -105,16 +105,28 @@ app.post('/register', async (req,res) => {
             password:hashedPassword,
         });
         jwt.sign({userId:createdUser._id,username} , jwtSecret , {} , (err , token)=>{
-            if (err) throw err;
+            if (err) return next(err);
             res.cookie('token',token,{sameSite:'none' , secure:true}).status(201).json({
                 id: createdUser._id ,
             });  
         });
     }catch(err){
-        if(err) throw err;
-        res.status(500).json('error');
+        if(err.code === 11000){
+            return res.status(409).json({error: 'username already exists'});
+        } 
+        //res.status(500).json('error');
+        next(err);
     }
     
+});
+
+// Global Error Handler: Catches and handles all errors in the app to
+// prevent server crashes.
+// Ensures consistent error responses and logs the error stack for 
+//debugging.
+app.use((err, req, res, next) => {
+    console.error(err.stack);// Logs the error stack trace for debugging
+    res.status(500).json({ message: 'Something went wrong!' });// Sends a generic error response
 });
 
 const server = app.listen(4000);
