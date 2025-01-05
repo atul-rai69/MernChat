@@ -129,7 +129,8 @@ app.use((err, req, res, next) => {
     res.status(500).json({ message: 'Something went wrong!' });// Sends a generic error response
 });
 
-const server = app.listen(4000);
+const PORT = process.env.PORT;
+const server = app.listen(PORT);
 
 const wss = new ws.WebSocketServer({server});
 wss.on('connection',(connection , req) => {
