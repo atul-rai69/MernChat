@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const User= require('./models/User');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const ws= require('ws');
 const Message = require('./models/Message');
 
